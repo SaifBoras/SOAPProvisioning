@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.2-hudson-754-SNAPSHOT. --><xs:schema xmlns:tns="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="1.0" xmlns:ns1="http://schemas.ericsson.com/cai3g1.2/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/">
+
+<xs:import namespace="http://schemas.ericsson.com/cai3g1.2/" schemaLocation="ProvisioningEndpointSlsb.xsd_1.xsd"></xs:import>
+
+<xs:element name="createEquipment">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="equipmentId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:CreateGetEquipmentCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="tns:EquipmentServicesType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="equipmentId" type="xs:string" use="required">
+  <xs:annotation>
+    <xs:appinfo>
+      <jxb:property name="createEquipmentIdattribute"/>
+    </xs:appinfo>
+  </xs:annotation>
+</xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="getResponseEquipment">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="equipmentId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:CreateGetEquipmentCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="tns:EquipmentServicesType" form="qualified"></xs:element>
+</xs:sequence>
+<xs:attribute name="equipmentId" type="xs:string" use="required">
+  <xs:annotation>
+    <xs:appinfo>
+      <jxb:property name="getResponseEquipmentIdattribute"/>
+    </xs:appinfo>
+  </xs:annotation>
+</xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="setEquipment">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="commonData" type="tns:SetEquipmentCommonDataType" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="services" type="tns:EquipmentServicesType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="equipmentId" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:complexType name="CreateGetEquipmentCommonDataType">
+<xs:sequence>
+<xs:element name="macAddress" type="xs:string" form="qualified"></xs:element>
+<xs:element name="name" type="xs:string" form="qualified"></xs:element>
+<xs:element name="subscriberId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SetEquipmentCommonDataType">
+<xs:sequence>
+<xs:element name="macAddress" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="name" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+    <!--
+        ****************************** SERVICE DEFINITIONS ***************************************************
+    -->
+
+    <xs:complexType name="EquipmentServicesType">
+        <xs:all>
+            <xs:element name="equipmentPortalPreferences" form="qualified" type="tns:EquipmentPortalPreferencesType" minOccurs="0"
+                maxOccurs="1" />
+            <xs:element name="plainBootstrap" form="qualified" type="tns:PlainBootstrapType" minOccurs="0" maxOccurs="1" />
+            <xs:element name="imsBootstrap" form="qualified" type="tns:ImsBootstrapType" minOccurs="0" maxOccurs="1" />
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="PlainBootstrapType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:sequence>
+                    <xs:element name="deviceSettings" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="authentication" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="password" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="delete" form="qualified" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="noAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="simplePasswordAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="password" form="qualified" type="xs:string" minOccurs="0" maxOccurs="1" />
+                            </xs:sequence>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="blocked" form="qualified" type="xs:boolean" default="false" minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ImsBootstrapType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:sequence>
+                    <xs:element name="deviceSettings" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="subscriber" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:attribute name="impu" type="xs:string" use="required" />
+                                        <xs:attribute name="impi" type="xs:string" use="optional" />
+                                        <xs:attribute name="password" type="xs:string" use="optional" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="user" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                        <xs:attribute name="impu" type="xs:string" use="required" />
+                                        <xs:attribute name="impi" type="xs:string" use="optional" />
+                                        <xs:attribute name="password" type="xs:string" use="optional" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="delete" form="qualified" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="noAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="simplePasswordAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="password" form="qualified" type="xs:string" minOccurs="0" maxOccurs="1" />
+                            </xs:sequence>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="blocked" form="qualified" type="xs:boolean" default="false" minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+        The Portal Preferences service: setting certain portal preferences applicable to a particular user. Each
+        preference comes as name-value pair. The list of valid names to be used are CPI-documented.
+    -->
+    <xs:complexType name="EquipmentPortalPreferencesType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:sequence>
+                    <xs:element name="preference" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                            <xs:attribute name="name" type="xs:string" use="required" />
+                            <xs:attribute name="value" type="xs:string" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

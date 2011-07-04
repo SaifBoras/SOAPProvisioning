@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.2-hudson-754-SNAPSHOT. --><xs:schema xmlns:tns="http://schemas.ericsson.com/cai3g1.2/" xmlns:ns3="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/" xmlns:ns2="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" xmlns:ns1="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="1.0" targetNamespace="http://schemas.ericsson.com/cai3g1.2/">
+
+<xs:import namespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/" schemaLocation="SessionControlEndpointSlsb.xsd_3.xsd"></xs:import>
+
+<xs:import namespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" schemaLocation="SessionControlEndpointSlsb.xsd_2.xsd"></xs:import>
+
+<xs:import namespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/" schemaLocation="SessionControlEndpointSlsb.xsd_4.xsd"></xs:import>
+
+<xs:element name="Cai3gFault">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="faultcode" type="xs:integer"></xs:element>
+<xs:element name="faultreason">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="reasonText" type="xs:string" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="faultrole" type="xs:string"></xs:element>
+<xs:element name="details" minOccurs="0">
+<xs:complexType>
+<xs:sequence>
+<xs:any processContents="lax" namespace="##other"></xs:any>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Create">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOType" type="tns:MoType"></xs:element>
+<xs:element name="MOId" type="tns:MOId" minOccurs="0"></xs:element>
+<xs:element name="MOAttributes" type="tns:CreateMoAttributes" minOccurs="0"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="CreateMODefinition" nillable="true" type="tns:AbstractCreateAttributeType"></xs:element>
+
+<xs:element name="CreateResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOId" type="tns:MOId"></xs:element>
+<xs:element name="MOAttributes" type="tns:GetResponseMOAttributesType" minOccurs="0"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Delete">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOType" type="tns:MoType"></xs:element>
+<xs:element name="MOId" type="tns:MOId"></xs:element>
+<xs:element name="MOAttributes" minOccurs="0">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="DeleteRequestMODefinition" type="tns:AbstractDeleteRequestAttributeType"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="DeleteRequestMODefinition" nillable="true" type="tns:AbstractDeleteRequestAttributeType"></xs:element>
+
+<xs:element name="DeleteResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOId" type="tns:MOId" minOccurs="0"></xs:element>
+<xs:element name="MOAttributes" type="tns:GetResponseMOAttributesType" minOccurs="0"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Get">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOType" type="tns:MoType"></xs:element>
+<xs:element name="MOId" type="tns:MOId" minOccurs="0"></xs:element>
+<xs:element name="MOAttributes" minOccurs="0">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="GetRequestMODefinition" type="tns:AbstractGetRequestAttributeType"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="GetMODefinition" nillable="true" type="tns:AbstractGetAttributeType"></xs:element>
+
+<xs:element name="GetRequestMODefinition" nillable="true" type="tns:AbstractGetRequestAttributeType"></xs:element>
+
+<xs:element name="GetResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOId" type="tns:MOId" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="MOAttributes" type="tns:GetResponseMoAttributes" minOccurs="0"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Login">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="userId" type="xs:string"></xs:element>
+<xs:element name="pwd" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="LoginResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="sessionId" type="xs:string"></xs:element>
+<xs:element name="baseSequenceId" type="xs:unsignedLong"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<!--
+<xs:element name="LoginResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="sessionParams" type="tns:sessionParammsType"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:complexType name="sessionParammsType">
+<xs:sequence>
+<xs:element name="sessionId" type="xs:string"></xs:element>
+<xs:element name="baseSequenceId" type="xs:unsignedLong"></xs:element>
+</xs:sequence>
+</xs:complexType>
+-->
+
+<xs:element name="Logout">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="sessionId" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="LogoutResponse">
+<xs:complexType>
+<xs:sequence></xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Notify">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="notificationHeader" type="tns:NotificationHeaderType"></xs:element>
+<xs:element name="correlatedNotifications" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="additionalText" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="sourceIndicator" type="xs:anyURI" minOccurs="0"></xs:element>
+<xs:element name="notificationData">
+<xs:complexType>
+<xs:sequence>
+<xs:any processContents="lax" namespace="##other" minOccurs="0" maxOccurs="unbounded"></xs:any>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="NotifyResponse">
+<xs:complexType>
+<xs:sequence></xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Search">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOType" type="tns:MoType"></xs:element>
+<xs:element name="filters" type="tns:SearchFiltersType"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="SearchResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOId" type="tns:AnyMOIdType" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="SequenceId" nillable="true" type="xs:integer"></xs:element>
+
+<xs:element name="SessionId" nillable="true" type="xs:string"></xs:element>
+
+<xs:element name="Set">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOType" type="tns:MoType"></xs:element>
+<xs:element name="MOId" type="tns:MOId"></xs:element>
+<xs:element name="MOAttributes" type="tns:SetMoAttributes"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="SetMODefinition" nillable="true" type="tns:AbstractSetAttributeType"></xs:element>
+
+<xs:element name="SetResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MOAttributes" type="tns:GetResponseMOAttributesType" minOccurs="0"></xs:element>
+<xs:element name="extension" type="tns:AnySequenceType" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="Subscribe">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="managerRef" type="xs:anyURI"></xs:element>
+<xs:element name="filters" type="tns:NotificationFiltersType"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="SubscribeResponse">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="subscriptionId" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="TransactionId" nillable="true" type="xs:integer"></xs:element>
+
+<xs:element name="Unsubscribe">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="managerRef" type="xs:anyURI"></xs:element>
+<xs:element name="subscriptionId" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="UnsubscribeResponse">
+<xs:complexType>
+<xs:sequence></xs:sequence>
+</xs:complexType>
+</xs:element>
+
+<xs:complexType name="TransactionIdFault">
+<xs:complexContent>
+<xs:extension base="tns:HeaderFaultType">
+<xs:sequence>
+<xs:element name="faultcode" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="HeaderFaultType">
+<xs:sequence>
+<xs:element name="faultactor" type="xs:string"></xs:element>
+<xs:element name="description" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SequenceIdFault">
+<xs:complexContent>
+<xs:extension base="tns:HeaderFaultType">
+<xs:sequence>
+<xs:element name="faultcode" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="SessionIdFault">
+<xs:complexContent>
+<xs:extension base="tns:HeaderFaultType">
+<xs:sequence>
+<xs:element name="faultcode" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="MOId">
+<xs:sequence>
+<xs:element name="subscriberId" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="userId" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="equipmentId" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CreateMoAttributes">
+<xs:sequence>
+<xs:element ref="ns1:createSubscriber" minOccurs="0"></xs:element>
+<xs:element ref="ns2:createUser" minOccurs="0"></xs:element>
+<xs:element ref="ns3:createEquipment" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AnySequenceType">
+<xs:sequence>
+<xs:any processContents="lax" namespace="##other" minOccurs="0" maxOccurs="unbounded"></xs:any>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GetResponseMOAttributesType">
+<xs:sequence>
+<xs:element name="GetMODefinition" type="tns:AbstractGetAttributeType"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AbstractGetAttributeType" abstract="true">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NotificationFiltersType">
+<xs:sequence>
+<xs:element name="filter" type="tns:NotificationFilterType" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NotificationFilterType">
+<xs:sequence>
+<xs:element name="cai3gUser" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="MOType" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="operation" type="tns:NotificationOperationType" nillable="true" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="MOId" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+<xs:element name="MOAttributes" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GetResponseMoAttributes">
+<xs:sequence>
+<xs:element ref="ns1:getResponseSubscriber" minOccurs="0"></xs:element>
+<xs:element ref="ns2:getResponseUser" minOccurs="0"></xs:element>
+<xs:element ref="ns3:getResponseEquipment" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SetMoAttributes">
+<xs:sequence>
+<xs:element ref="ns1:setSubscriber" minOccurs="0"></xs:element>
+<xs:element ref="ns2:setUser" minOccurs="0"></xs:element>
+<xs:element ref="ns3:setEquipment" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchFilterType">
+<xs:sequence>
+<xs:element name="MOAttributes" type="xs:string" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AnyMOIdType">
+<xs:sequence>
+<xs:any processContents="lax" namespace="##other" minOccurs="0" maxOccurs="unbounded"></xs:any>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AbstractDeleteRequestAttributeType" abstract="true">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NotificationHeaderType">
+<xs:sequence>
+<xs:element name="cai3gUser" type="xs:string"></xs:element>
+<xs:element name="MOType" type="tns:MoType"></xs:element>
+<xs:element name="MOId" type="tns:AnyMOIdType"></xs:element>
+<xs:element name="notificationId" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="eventTime" type="xs:dateTime"></xs:element>
+<xs:element name="notificationActor" type="xs:anyURI" minOccurs="0"></xs:element>
+<xs:element name="operation" type="tns:NotificationOperationType"></xs:element>
+<xs:element name="subscriptionId" type="xs:string"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AbstractGetRequestAttributeType" abstract="true">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SearchFiltersType">
+<xs:sequence>
+<xs:element name="filter" type="tns:SearchFilterType" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AbstractSetAttributeType" abstract="true">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AbstractCreateAttributeType" abstract="true">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="MoType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="User@http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/"></xs:enumeration>
+<xs:enumeration value="Subscriber@http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/"></xs:enumeration>
+<xs:enumeration value="Equipment@http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/"></xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="NotificationOperationType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Create"></xs:enumeration>
+<xs:enumeration value="Delete"></xs:enumeration>
+<xs:enumeration value="Set"></xs:enumeration>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>

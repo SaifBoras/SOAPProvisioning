@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.2-hudson-754-SNAPSHOT. --><xs:schema xmlns:tns="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/" xmlns:ns1="http://schemas.ericsson.com/cai3g1.2/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_equipment/">
+
+<xs:import namespace="http://schemas.ericsson.com/cai3g1.2/" schemaLocation="SessionControlEndpointSlsb.xsd_1.xsd"></xs:import>
+
+<xs:element name="createEquipment">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="equipmentId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:CreateGetEquipmentCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="equipmentID" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="getResponseEquipment">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="equipmentId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:CreateGetEquipmentCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified"></xs:element>
+</xs:sequence>
+<xs:attribute name="equipmentID" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="setEquipment">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="commonData" type="tns:SetEquipmentCommonDataType" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="equipmentId" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:complexType name="CreateGetEquipmentCommonDataType">
+<xs:sequence>
+<xs:element name="macAddress" type="xs:string" form="qualified"></xs:element>
+<xs:element name="name" type="xs:string" form="qualified"></xs:element>
+<xs:element name="subscriberId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SetEquipmentCommonDataType">
+<xs:sequence>
+<xs:element name="macAddress" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="name" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

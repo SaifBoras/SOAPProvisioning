@@ -1,0 +1,57 @@
+        
+
+
+
+
+        SubscriberServicesType iapSbsSubsType = new SubscriberServicesType();
+        iapSbsSubsType = CreateIapSubscriberServices();
+        
+        
+        CatchupTvType catchup = new CatchupTvType();
+        NetworkTimeshiftType timesh = new NetworkTimeshiftType();
+        NpvrType npvr = new NpvrType();
+        npvr.setQuota(BigInteger.valueOf(120));
+        npvr.setRecordingTimeToLive(BigInteger.valueOf(120));
+        
+        ChannelManagerType chm= new ChannelManagerType();
+        ChannelManagerType.ChannelList chList = new ChannelManagerType.ChannelList();
+        ChannelManagerType.ChannelPackageList.ChannelPackage chPack = new ChannelManagerType.ChannelPackageList.ChannelPackage();
+        ChannelManagerType.ChannelPackageList chPackList = new ChannelManagerType.ChannelPackageList();
+        chPack.setId("all");
+
+        chPackList.getChannelPackage().add(chPack);
+        chm.setChannelPackageList(chPackList);
+        chm.setChannelList(chList);
+
+        iapSbsSubsType.setCatchuptv(catchup);
+        iapSbsSubsType.setNetworkTimeshift(timesh);
+        iapSbsSubsType.setNpvr(npvr);
+        iapSbsSubsType.setChannelManager(chm);
+
+        SubscriberAccountIdentityType ident = new SubscriberAccountIdentityType();
+        ident.setHttpAuthenticationId(SubscriberId);
+        iapSbsSubsType.setSubscriberAccountIdentity(ident);
+
+
+        IptvProxyType proxy = new IptvProxyType();
+        proxy.setIptvProxyPassword(SubscriberId);
+        iapSbsSubsType.setIptvProxy(proxy);
+
+        VodType vod = new VodType();
+		
+        AuthorizationList vodAuth = new VodType.AuthorizationList();
+        AuthorizationList.Svod vodAuthS = new AuthorizationList.Svod();
+        vodAuthS.setId("1001");
+        vodAuth.getSvod().add(vodAuthS);
+		QName qnm = new QName("http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/", "authorizationList");
+        JAXBElement<AuthorizationList> JvodAuth = new JAXBElement<AuthorizationList>(qnm,  VodType.AuthorizationList.class, vodAuth);
+        vod.setAuthorizationList(JvodAuth);
+        
+		
+		VodType.RentalList vodRent = new VodType.RentalList();
+		
+        qnm = new QName("http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/", "rentalList");
+        JAXBElement<RentalList> JvodRent = new JAXBElement<RentalList>(qnm, VodType.RentalList.class, vodRent);
+        vod.setRentalList(JvodRent);
+
+        iapSbsSubsType.setVod(vod);

@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="IapConfigurationWs" targetNamespace="http://configmanagement.iap.iptv.ericsson.com" xmlns:tns="http://configmanagement.iap.iptv.ericsson.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://configmanagement.iap.iptv.ericsson.com" xmlns="http://www.w3.org/2001/XMLSchema">
+      <xsd:complexType name="packageNameType">
+        <xsd:sequence>
+          <xsd:element name="name" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="propertyValueType">
+        <xsd:annotation>
+          <xsd:documentation>The types supported for configuration properties</xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+          <xsd:element name="stringValue" type="string"/>
+          <xsd:element name="dateValue" type="dateTime"/>
+          <xsd:element name="intValue" type="int"/>
+          <xsd:element name="longValue" type="long"/>
+          <xsd:element name="floatValue" type="float"/>
+          <xsd:element name="doubleValue" type="double"/>
+          <xsd:element name="booleanValue" type="boolean"/>
+        </xsd:choice>
+      </xsd:complexType>
+      <xsd:simpleType name="validPropertyType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="STRING"/>
+          <xsd:enumeration value="DATE"/>
+          <xsd:enumeration value="INT"/>
+          <xsd:enumeration value="LONG"/>
+          <xsd:enumeration value="FLOAT"/>
+          <xsd:enumeration value="DOUBLE"/>
+          <xsd:enumeration value="BOOLEAN"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="schemaType">
+        <xsd:annotation>
+          <xsd:documentation>The different types that a package schema can have.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="string">
+          <xsd:enumeration value="STATIC"/>
+          <xsd:enumeration value="DYNAMIC"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="propertyType">
+        <xsd:sequence>
+          <xsd:element name="name" type="string"/>
+          <xsd:element name="value" type="tns:propertyValueType" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="packageConfigurationType">
+        <xsd:annotation>
+          <xsd:documentation>This type is used for configuration data of a specific package. This means
+                that no schema information is available.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="packageName" type="tns:packageNameType"/>
+          <xsd:element name="property" type="tns:propertyType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="propertyRefType">
+        <xsd:sequence>
+          <xsd:element name="packageName" type="tns:packageNameType"/>
+          <xsd:element name="propertyName" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="propertySchemaType">
+        <xsd:annotation>
+          <xsd:documentation>This type is used for configuration data schema excluding the data.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="name" type="string"/>
+          <xsd:element name="description" type="string"/>
+          <xsd:element name="type" type="tns:validPropertyType"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="optionalSchemaType">
+        <xsd:complexContent>
+          <xsd:extension base="tns:propertySchemaType">
+            <xsd:sequence>
+              <xsd:element name="defaultValue" type="string"/>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="packageSchemaType">
+        <xsd:annotation>
+          <xsd:documentation>Specifies the schema for a single package. Besides name, type and description 
+                each package has a list of mandatory and a list of optional parameters. These lists can be empty.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="name" type="tns:packageNameType"/>
+          <xsd:element name="type" type="tns:schemaType"/>
+          <xsd:element name="description" type="string"/>
+          <xsd:element name="mandatoryParams" type="tns:propertySchemaType" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="optionalParams" type="tns:optionalSchemaType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="userType">
+        <xsd:sequence>
+          <xsd:element name="userName" type="string"/>
+          <xsd:element name="password" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:simpleType name="loginTokenType">
+        <xsd:restriction base="xsd:string"/>
+      </xsd:simpleType>
+      <xsd:simpleType name="validationError">
+        <xsd:annotation>
+          <xsd:documentation>An enumeration representing the possible validation errors.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="BAD_REFERENCE"/>
+          <xsd:enumeration value="PROPERTY_CONSTRAINT"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="schemaError">
+        <xsd:annotation>
+          <xsd:documentation>An enumeration representing the possible errors in the input data with regards
+                to existence of package and or property.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="PROPERTY_NOT_EXISTING"/>
+          <xsd:enumeration value="PACKAGE_NOT_EXISTING"/>
+          <xsd:enumeration value="PACKAGE_ALREADY_EXISTING"/>
+          <xsd:enumeration value="INVALID_PACKAGE_FORMAT"/>
+          <xsd:enumeration value="PROPERTY_TYPE"/>
+          <xsd:enumeration value="MANDATORY_MISSING"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:complexType name="ValidationFaultSequence">
+        <xsd:sequence>
+          <xsd:element name="failureType" type="tns:validationError"/>
+          <xsd:element name="packageName" type="tns:packageNameType"/>
+          <xsd:element name="ownerSchemaName" type="string"/>
+          <xsd:element name="ownerPropertyName" type="string"/>
+          <xsd:element name="targetApp" type="string"/>
+          <xsd:element name="targetPropertyValue" type="string"/>
+          <xsd:element name="constraintDesc" type="string"/>
+          <xsd:element name="ownerPropertyValue" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ValidationFaultType">
+        <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+          <xsd:element name="error" type="tns:ValidationFaultSequence"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SchemaFaultTypeSequence">
+        <xsd:sequence>
+          <xsd:element name="message" type="string"/>
+          <xsd:element name="failureType" type="tns:schemaError"/>
+          <xsd:element name="packageSchema" type="tns:packageSchemaType"/>
+          <xsd:element name="packageName" type="tns:packageNameType"/>
+          <xsd:element name="propertyName" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SchemaFaultType">
+        <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+          <xsd:element name="error" type="tns:SchemaFaultTypeSequence"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="TransactionExistsFaultType">
+        <xsd:sequence>
+          <xsd:element name="message" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="NoTransactionFaultType">
+        <xsd:sequence>
+          <xsd:element name="message" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="InvalidLoginTokenFaultType">
+        <xsd:sequence>
+          <xsd:element name="message" type="string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="InvalidUserFaultType">
+        <xsd:sequence>
+          <xsd:element name="message" type="string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="voidType">
+        <xsd:sequence/>
+      </xsd:complexType>
+      <xsd:element name="void" type="tns:voidType"/>
+      <xsd:element name="packageSchema" type="tns:packageSchemaType"/>
+      <xsd:element name="startTransactionRequestElement" type="tns:loginTokenType"/>
+      <xsd:element name="ValidationFault" type="tns:ValidationFaultType"/>
+      <xsd:element name="SchemaFault" type="tns:SchemaFaultType"/>
+      <xsd:element name="InvalidLoginTokenFault" type="tns:InvalidLoginTokenFaultType"/>
+      <xsd:element name="NoTransactionFault" type="tns:NoTransactionFaultType"/>
+      <xsd:element name="TransactionExistsFault" type="tns:TransactionExistsFaultType"/>
+      <xsd:element name="InvalidUserFault" type="tns:InvalidUserFaultType"/>
+      <xsd:element name="packageConfiguration" type="tns:packageConfigurationType"/>
+      <xsd:element name="rollbackRequestElement" type="tns:loginTokenType"/>
+      <xsd:element name="commitRequestElement" type="tns:loginTokenType"/>
+      <xsd:element name="loginRequestElement" type="tns:userType"/>
+      <xsd:element name="logoutRequestElement" type="tns:loginTokenType"/>
+      <xsd:element name="loginResponse" type="tns:loginTokenType"/>
+      <xsd:element name="packageSchemaList">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="package" type="tns:packageSchemaType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="packageConfigurationList">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="packageConfiguration" type="tns:packageConfigurationType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="readSchemaRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageName" type="tns:packageNameType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="readDataRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageName" type="tns:packageNameType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="listSchemaRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageName" type="tns:packageNameType"/>
+            <xsd:element name="depth" type="integer" default="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="listDataRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageName" type="tns:packageNameType"/>
+            <xsd:element name="depth" type="integer" default="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="createRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageConfiguration" type="tns:packageConfigurationType" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="updateRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageConfiguration" type="tns:packageConfigurationType" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="mergeRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageConfiguration" type="tns:packageConfigurationType" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="deletePackageRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="packageName" type="tns:packageNameType" minOccurs="1" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="deletePropertyRequestElement">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="loginToken" type="tns:loginTokenType"/>
+            <xsd:element name="property" type="tns:propertyRefType" minOccurs="1" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+  <message name="voidResponse">
+    <part name="return" element="tns:void"/>
+  </message>
+  <message name="loginRequest">
+    <part name="user" element="tns:loginRequestElement"/>
+  </message>
+  <message name="loginResponse">
+    <part name="token" element="tns:loginResponse"/>
+  </message>
+  <message name="startTransactionRequest">
+    <part name="token" element="tns:startTransactionRequestElement"/>
+  </message>
+  <message name="logoutRequest">
+    <part name="token" element="tns:logoutRequestElement"/>
+  </message>
+  <message name="readSchemaRequest">
+    <part name="name" element="tns:readSchemaRequestElement"/>
+  </message>
+  <message name="readDataRequest">
+    <part name="name" element="tns:readDataRequestElement"/>
+  </message>
+  <message name="readSchemaResponse">
+    <part name="name" element="tns:packageSchema"/>
+  </message>
+  <message name="readDataResponse">
+    <part name="name" element="tns:packageConfiguration"/>
+  </message>
+  <message name="listSchemaRequest">
+    <part name="name" element="tns:listSchemaRequestElement"/>
+  </message>
+  <message name="listDataRequest">
+    <part name="name" element="tns:listDataRequestElement"/>
+  </message>
+  <message name="createRequest">
+    <part name="name" element="tns:createRequestElement"/>
+  </message>
+  <message name="updateRequest">
+    <part name="name" element="tns:updateRequestElement"/>
+  </message>
+  <message name="mergeRequest">
+    <part name="name" element="tns:mergeRequestElement"/>
+  </message>
+  <message name="deletePackageRequest">
+    <part name="name" element="tns:deletePackageRequestElement"/>
+  </message>
+  <message name="deletePropertyRequest">
+    <part name="name" element="tns:deletePropertyRequestElement"/>
+  </message>
+  <message name="listSchemaResponse">
+    <part name="packages" element="tns:packageSchemaList"/>
+  </message>
+  <message name="listDataResponse">
+    <part name="packages" element="tns:packageConfigurationList"/>
+  </message>
+  <message name="TransactionExistsFault">
+    <part name="fault" element="tns:TransactionExistsFault"/>
+  </message>
+  <message name="NoTransactionFault">
+    <part name="fault" element="tns:NoTransactionFault"/>
+  </message>
+  <message name="ValidationFault">
+    <part name="fault" element="tns:ValidationFault"/>
+  </message>
+  <message name="SchemaFault">
+    <part name="fault" element="tns:SchemaFault"/>
+  </message>
+  <message name="InvalidLoginTokenFault">
+    <part name="fault" element="tns:InvalidLoginTokenFault"/>
+  </message>
+  <message name="InvalidUserFault">
+    <part name="fault" element="tns:InvalidUserFault"/>
+  </message>
+  <message name="commitRequest">
+    <part name="loginToken" element="tns:commitRequestElement"/>
+  </message>
+  <message name="rollbackRequest">
+    <part name="loginToken" element="tns:rollbackRequestElement"/>
+  </message>
+  <portType name="IapConfigurationManagement">
+    <operation name="login">
+      <documentation>Used to log in. A login token is returned which must then be used for all operations.</documentation>
+      <input message="tns:loginRequest"/>
+      <output message="tns:loginResponse"/>
+      <fault name="InvalidUserFault" message="tns:InvalidUserFault"/>
+    </operation>
+    <operation name="logout">
+      <documentation>Logs out the user which has the specified login token.</documentation>
+      <input message="tns:logoutRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+    </operation>
+    <operation name="startTransaction">
+      <documentation>This operation will mark the start of a long-running transaction. A transaction will be active until:
+            Committed / rolled back / timed out. 
+            All update/merge/delete operation in a transaction will be treated as one atomic operation.</documentation>
+      <input message="tns:startTransactionRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="TransactionExistsFault" message="tns:TransactionExistsFault"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+    </operation>
+    <operation name="commitTransaction">
+      <documentation>Tries to commit the ongoing transaction. If a validation fails, a validation fault
+            is thrown with information regarding the failure.</documentation>
+      <input message="tns:commitRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="NoTransactionFault" message="tns:NoTransactionFault"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+    </operation>
+    <operation name="rollbackTransaction">
+      <documentation/>
+      <input message="tns:rollbackRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="NoTransactionFault" message="tns:NoTransactionFault"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+    </operation>
+    <operation name="create">
+      <documentation>For each configuration package inputed, a check will be made to see if the package already exists.
+            A new package is created only if no such package existed before, otherwise an exception is thrown.</documentation>
+      <input message="tns:createRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="update">
+      <documentation>This methods checks first if there is an existing configuration package with the given name.
+            If there exists such package, it removes it and then creates a new one with the given configuration properties.
+            If there does not exist such package, it creates a new package with the given configuration properties.</documentation>
+      <input message="tns:updateRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="merge">
+      <documentation>This method requires that the specified package already exists. It only updates the specified properties.</documentation>
+      <input message="tns:mergeRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="deletePackage">
+      <documentation>This operation removes the specified instances of the dynamic packages. These does not have to be
+            of the same dynamic package type.</documentation>
+      <input message="tns:deletePackageRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="deleteProperty">
+      <documentation>This operation removes the set value for the specified property references.
+            Can only be used on optional properties.</documentation>
+      <input message="tns:deletePropertyRequest"/>
+      <output message="tns:voidResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="ValidationFault" message="tns:ValidationFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="readSchema">
+      <documentation>This operation reads the schema of the specified package.</documentation>
+      <input message="tns:readSchemaRequest"/>
+      <output message="tns:readSchemaResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="readData">
+      <documentation>This operation reads the configuration values of the specified package.</documentation>
+      <input message="tns:readDataRequest"/>
+      <output message="tns:readDataResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="listSchema">
+      <documentation>This operation reads the configuration schema, starting at the given point and going 
+            down as many steps as specified in the depth parameter which by default is set 0.</documentation>
+      <input message="tns:listSchemaRequest"/>
+      <output message="tns:listSchemaResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+    <operation name="listData">
+      <documentation>This operation reads the configuration data recursivly, starting at the given point and going 
+            down as many steps as specified in the depth parameter which by default is set 0.</documentation>
+      <input message="tns:listDataRequest"/>
+      <output message="tns:listDataResponse"/>
+      <fault name="InvalidLoginTokenFault" message="tns:InvalidLoginTokenFault"/>
+      <fault name="SchemaFault" message="tns:SchemaFault"/>
+    </operation>
+  </portType>
+  <binding name="IapConfigurationManagementBinding" type="tns:IapConfigurationManagement">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="login">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidUserFault">
+        <soap:fault name="InvalidUserFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="logout">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="startTransaction">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="TransactionExistsFault">
+        <soap:fault name="TransactionExistsFault" use="literal"/>
+      </fault>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="commitTransaction">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="NoTransactionFault">
+        <soap:fault name="NoTransactionFault" use="literal"/>
+      </fault>
+      <fault name="ValidationFault">
+        <soap:fault name="ValidationFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="rollbackTransaction">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="NoTransactionFault">
+        <soap:fault name="NoTransactionFault" use="literal"/>
+      </fault>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="create">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="ValidationFault">
+        <soap:fault name="ValidationFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="update">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="ValidationFault">
+        <soap:fault name="ValidationFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="merge">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="ValidationFault">
+        <soap:fault name="ValidationFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="deletePackage">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="ValidationFault">
+        <soap:fault name="ValidationFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="deleteProperty">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="ValidationFault">
+        <soap:fault name="ValidationFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="readSchema">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="readData">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="listSchema">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="listData">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="InvalidLoginTokenFault">
+        <soap:fault name="InvalidLoginTokenFault" use="literal"/>
+      </fault>
+      <fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="iapConfigurationManagementWS">
+    <port name="IapConfigurationManagement" binding="tns:IapConfigurationManagementBinding">
+      <soap:address location="http://164.48.243.98:8080/ConfigEndpointSlsbService/ConfigEndpointSlsb"/>
+    </port>
+  </service>
+</definitions>

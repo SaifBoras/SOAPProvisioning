@@ -1,0 +1,387 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+xmlns:cai3g="http://schemas.ericsson.com/cai3g1.2/"
+targetNamespace="http://schemas.ericsson.com/cai3g1.2/">
+<import namespace="http://schemas.ericsson.com/cai3g1.2/" location="cai3g1.2_.xsd"/>
+<message name="CreateRequest">
+<part name="parameters" element="cai3g:Create"/>
+</message>
+<message name="CreateResponse">
+<part name="parameters" element="cai3g:CreateResponse"/>
+</message>
+<message name="GetRequest">
+<part name="parameters" element="cai3g:Get"/>
+</message>
+<message name="GetResponse">
+<part name="parameters" element="cai3g:GetResponse"/>
+</message>
+<message name="SetRequest">
+<part name="parameters" element="cai3g:Set"/>
+</message>
+<message name="SetResponse">
+<part name="parameters" element="cai3g:SetResponse"/>
+</message>
+<message name="DeleteRequest">
+<part name="parameters" element="cai3g:Delete"/>
+</message>
+<message name="DeleteResponse">
+<part name="parameters" element="cai3g:DeleteResponse"/>
+</message>
+<message name="SearchRequest">
+<part name="parameters" element="cai3g:Search"/>
+</message>
+<message name="SearchResponse">
+<part name="parameters" element="cai3g:SearchResponse"/>
+</message>
+<message name="LoginRequest">
+<part name="parameters" element="cai3g:Login"/>
+</message>
+<message name="LoginResponse">
+<part name="parameters" element="cai3g:LoginResponse"/>
+</message>
+<message name="LogoutRequest">
+<part name="parameters" element="cai3g:Logout"/>
+</message>
+<message name="LogoutResponse">
+<part name="parameters" element="cai3g:LogoutResponse"/>
+</message>
+<message name="NotifyResponse">
+<part name="parameters" element="cai3g:NotifyResponse"/>
+</message>
+<message name="UnsubscribeResponse">
+<part name="parameters" element="cai3g:UnsubscribeResponse"/>
+</message>
+<message name="HeadInfo">
+<part name="sessionId" element="cai3g:SessionId"/>
+<part name="transactionId" element="cai3g:TransactionId"/>
+<part name="sequenceId" element="cai3g:SequenceId"/>
+</message>
+<message name="SubscribeRequest">
+<part name="parameters" element="cai3g:Subscribe"/>
+</message>
+<message name="SubscribeResponse">
+<part name="parameters" element="cai3g:SubscribeResponse"/>
+</message>
+<message name="UnsubscribeRequest">
+<part name="parameters" element="cai3g:Unsubscribe"/>
+</message>
+<message name="NotifyRequest">
+<part name="parameters" element="cai3g:Notify"/>
+</message>
+<message name="Cai3gFault">
+<part name="parameters" element="cai3g:Cai3gFault"/>
+</message>
+<message name="Cai3gHeaderFault">
+<part name="sessionIdFault" type="cai3g:SessionIdFault"/>
+<part name="transactionIdFault"
+type="cai3g:TransactionIdFault"/>
+<part name="sequenceIdFault" type="cai3g:SequenceIdFault"/>
+</message>
+<portType name="Provisioning">
+<operation name="Create">
+<input message="cai3g:CreateRequest"/>
+<output message="cai3g:CreateResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+<operation name="Delete">
+<input message="cai3g:DeleteRequest"/>
+<output message="cai3g:DeleteResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+<operation name="Get">
+<input message="cai3g:GetRequest"/>
+<output message="cai3g:GetResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+<operation name="Set">
+<input message="cai3g:SetRequest"/>
+<output message="cai3g:SetResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+<operation name="Search">
+<input message="cai3g:SearchRequest"/>
+<output message="cai3g:SearchResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+</portType>
+<portType name="SessionControl">
+<operation name="Login">
+<input message="cai3g:LoginRequest"/>
+<output message="cai3g:LoginResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+<operation name="Logout">
+<input message="cai3g:LogoutRequest"/>
+<output message="cai3g:LogoutResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+</portType>
+<portType name="Notification">
+<operation name="Subscribe">
+<input message="cai3g:SubscribeRequest"/>
+<output message="cai3g:SubscribeResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+<operation name="Notify">
+<input message="cai3g:NotifyRequest"/>
+<output message="cai3g:NotifyResponse"/>
+</operation>
+<operation name="Unsubscribe">
+<input message="cai3g:UnsubscribeRequest"/>
+<output message="cai3g:UnsubscribeResponse"/>
+<fault name="Cai3gFault" message="cai3g:Cai3gFault"/>
+</operation>
+</portType>
+<binding name="Provisioning" type="cai3g:Provisioning">
+<soap:binding style="document"
+transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="Create">
+<soap:operation soapAction="CAI3G#Create" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Delete">
+<soap:operation soapAction="CAI3G#Delete" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Get">
+<soap:operation soapAction="CAI3G#Get" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Set">
+<soap:operation soapAction="CAI3G#Set" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Search">
+<soap:operation soapAction="CAI3G#Search" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+</binding>
+<binding name="SessionControl" type="cai3g:SessionControl">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="Login">
+<soap:operation soapAction="CAI3G#Login" style="document"/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Logout">
+<soap:operation soapAction="CAI3G#Logout" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+</binding>
+<binding name="Notification" type="cai3g:Notification">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="Subscribe">
+<soap:operation soapAction="CAI3G#Subscribe" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Unsubscribe">
+<soap:operation soapAction="CAI3G#Unsubscribe" style="document"/>
+<input>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+<soap:header message="cai3g:HeadInfo" part="sessionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sessionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="transactionId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="transactionIdFault" use="literal"/>
+</soap:header>
+<soap:header message="cai3g:HeadInfo" part="sequenceId" use="literal">
+<soap:headerfault message="cai3g:Cai3gHeaderFault"
+part="sequenceIdFault" use="literal"/>
+</soap:header>
+</output>
+<fault name="Cai3gFault">
+<soap:fault name="Cai3gFault" use="literal"/>
+</fault>
+</operation>
+<operation name="Notify">
+<soap:operation soapAction="CAI3G#Notify" style="document"/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+</binding>
+<service name="CAI3G">
+<port name="Provisioning" binding="cai3g:Provisioning">
+<soap:address location="http://anyema.anyprovisioningprovider.com/cai3g"/>
+</port>
+<port name="SessionControl" binding="cai3g:SessionControl">
+<soap:address location="http://anyema.anyprovisioningprovider.com/cai3g"/>
+</port>
+<port name="Notification" binding="cai3g:Notification">
+<soap:address location="http://anyema.anyprovisioningprovider.com/cai3g"/>
+</port>
+</service>
+</definitions>

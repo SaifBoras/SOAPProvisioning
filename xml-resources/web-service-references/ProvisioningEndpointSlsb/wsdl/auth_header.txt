@@ -1,0 +1,8 @@
+        @WebParam(header=true, name="SessionId", targetNamespace="http://schemas.ericsson.com/cai3g1.2/")
+        Holder<String> sessionId,
+        @WebParam(header=true, name="SequenceId", targetNamespace="http://schemas.ericsson.com/cai3g1.2/")
+        Holder<BigInteger> sequenceId,
+		
+		
+		SubsServType
+		@XmlRootElement(name="MOAttributes")

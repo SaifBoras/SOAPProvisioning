@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.2-hudson-754-SNAPSHOT. --><xs:schema xmlns:tns="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/" xmlns:ns1="http://schemas.ericsson.com/cai3g1.2/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/">
+
+<xs:import namespace="http://schemas.ericsson.com/cai3g1.2/" schemaLocation="ProvisioningEndpointSlsb.xsd_1.xsd"></xs:import>
+
+<xs:element name="createSubscriber">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="subscriberId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:CreateSubscriberCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="subscriberID" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="getResponseSubscriber">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="subscriberId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:GetSubscriberCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified"></xs:element>
+<xs:element name="users" form="qualified">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="userId" type="xs:string" form="qualified" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="equipment" form="qualified">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="equipmentId" type="xs:string" form="qualified" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute name="subscriberID" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="setSubscriber">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="commonData" type="tns:SetSubscriberCommonDataType" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="subscriberId" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:complexType name="CreateSubscriberCommonDataType">
+<xs:sequence>
+<xs:element name="blockedState" type="tns:BlockedStateType" form="qualified"></xs:element>
+<xs:element name="postalCode" type="xs:string" form="qualified"></xs:element>
+<xs:element name="serviceRegion" type="xs:string" form="qualified"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="BlockedStateType">
+<xs:sequence>
+<xs:element name="unBlocked" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="blocked" type="tns:Blocked" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Blocked">
+<xs:sequence>
+<xs:element name="indefinitely" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="untilDate" type="xs:date" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GetSubscriberCommonDataType">
+<xs:sequence>
+<xs:element name="blockedState" type="tns:BlockedStateType" form="qualified"></xs:element>
+<xs:element name="postalCode" type="xs:string" form="qualified"></xs:element>
+<xs:element name="serviceRegion" type="xs:string" form="qualified"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SetSubscriberCommonDataType">
+<xs:sequence>
+<xs:element name="blockedState" type="tns:BlockedStateType" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="postalCode" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="serviceRegion" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

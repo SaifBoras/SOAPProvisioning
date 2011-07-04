@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.2-hudson-754-SNAPSHOT. -->
+<xs:schema xmlns:tns="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/" 
+		   xmlns:ns1="http://schemas.ericsson.com/cai3g1.2/" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+		   xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="1.0"
+           xmlns:user="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" version="1.0" 
+		   targetNamespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/">
+
+<xs:import namespace="http://schemas.ericsson.com/cai3g1.2/" schemaLocation="ProvisioningEndpointSlsb.xsd_1.xsd"></xs:import>
+<xs:import namespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" schemaLocation="ProvisioningEndpointSlsb.xsd_2.xsd"></xs:import>
+
+
+		
+<xs:element name="createSubscriber">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="subscriberId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:CreateSubscriberCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="tns:SubscriberServicesType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+
+<xs:attribute name="subscriberId" type="xs:string" use="required">
+  <xs:annotation>
+    <xs:appinfo>
+      <jxb:property name="createSubscriberIdattribute"/>
+    </xs:appinfo>
+  </xs:annotation>
+</xs:attribute>
+</xs:complexType>
+</xs:element>
+
+
+<xs:element name="getResponseSubscriber">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="subscriberId" type="xs:string" form="qualified"></xs:element>
+<xs:element name="commonData" type="tns:GetSubscriberCommonDataType" form="qualified"></xs:element>
+<xs:element name="services" type="ns1:AnySequenceType" form="qualified"></xs:element>
+<xs:element name="users" form="qualified">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="userId" type="xs:string" form="qualified" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="equipment" form="qualified">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="equipmentId" type="xs:string" form="qualified" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute name="subscriberId" type="xs:string" use="required">
+  <xs:annotation>
+    <xs:appinfo>
+      <jxb:property name="getResponseSubscriberIdattribute"/>
+    </xs:appinfo>
+  </xs:annotation>
+</xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:element name="setSubscriber">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="commonData" type="tns:SetSubscriberCommonDataType" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="services" type="tns:SubscriberServicesType" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+<xs:attribute name="subscriberId" type="xs:string" use="required"></xs:attribute>
+</xs:complexType>
+</xs:element>
+
+<xs:complexType name="CreateSubscriberCommonDataType">
+<xs:sequence>
+<xs:element name="blockedState" type="tns:BlockedStateType" form="qualified"></xs:element>
+<xs:element name="postalCode" type="xs:string" form="qualified"></xs:element>
+<xs:element name="serviceRegion" type="xs:string" form="qualified"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="BlockedStateType">
+<xs:sequence>
+<xs:element name="unBlocked" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="blocked" type="tns:Blocked" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Blocked">
+<xs:sequence>
+<xs:element name="indefinitely" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="untilDate" type="xs:date" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GetSubscriberCommonDataType">
+<xs:sequence>
+<xs:element name="blockedState" type="tns:BlockedStateType" form="qualified"></xs:element>
+<xs:element name="postalCode" type="xs:string" form="qualified"></xs:element>
+<xs:element name="serviceRegion" type="xs:string" form="qualified"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SetSubscriberCommonDataType">
+<xs:sequence>
+<xs:element name="blockedState" type="tns:BlockedStateType" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="postalCode" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="serviceRegion" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+<xs:element name="defaultUser" type="xs:string" form="qualified" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+    <!--
+****************************** SERVICE DEFINITIONS ***************************************************
+-->
+
+
+
+    <!--
+        The services that a subscriber can have, see below for a more detailed description. For CREATE, all supplied
+        services will be added to the subscriber. For SET, only those services that needs to be updated should be
+        supplied. For GET, only services that the subscriber has is listed.
+    -->
+    <xs:complexType name="SubscriberServicesType">
+        <xs:all>
+            <xs:element name="catchuptv" type="tns:CatchupTvType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="networkTimeshift" type="tns:NetworkTimeshiftType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="localTimeshift" type="tns:LocalTimeshiftType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="lpvr" type="tns:LpvrType" minOccurs="0" form="qualified" maxOccurs="1" />
+            <xs:element name="broadcastReminder" type="tns:BroadcastReminderType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="npvr" type="tns:NpvrType" minOccurs="0" form="qualified" maxOccurs="1" />
+            <xs:element name="remoteAuthorization" type="tns:RemoteAuthorizationType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="vod" type="tns:VodType" form="qualified" minOccurs="0" />
+            <xs:element name="whatsOnTv" type="tns:WhatsOnTvType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="channelManager" type="tns:ChannelManagerType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="reservedUsers" type="tns:ReservedUsersType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="payPerView" type="tns:PayPerViewType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="subscriberAccountIdentity" type="tns:SubscriberAccountIdentityType" form="qualified" minOccurs="0"
+                maxOccurs="1" />
+            <xs:element name="iptvProxy" type="tns:IptvProxyType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="subscriberPortalPreferences" type="tns:SubscriberPortalPreferencesType" form="qualified" minOccurs="0"
+                maxOccurs="1" />
+            <xs:element name="portalSelector" type="tns:PortalSelectorType" form="qualified" minOccurs="0" maxOccurs="1" />
+            <xs:element name="bootstrap" type="tns:bootstrapType" form="qualified" minOccurs="0" maxOccurs="1" />
+        </xs:all>
+    </xs:complexType>
+
+    <!-- The CatchupTv service: -->
+    <xs:complexType name="CatchupTvType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The Network Timeshift service: -->
+    <xs:complexType name="NetworkTimeshiftType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The Local Timeshift service: -->
+    <xs:complexType name="LocalTimeshiftType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The nPVR service: -->
+    <xs:complexType name="LpvrType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The BroadcastReminder service: -->
+    <xs:complexType name="BroadcastReminderType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The Remote Authorization service: -->
+    <xs:complexType name="RemoteAuthorizationType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <!--
+The nPVR (network-based Personal Video Recorder) service: Recording of programs on the network side.
+-->
+    <xs:complexType name="NpvrType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <!--
+                        The recording time to live is how many days each recordings will remain, until it is
+                        automatically deleted. This parameter is mandatory when the service is added to a subscriber
+                    -->
+                    <xs:element name="recordingTimeToLive" type="xs:positiveInteger" form="qualified" minOccurs="0" maxOccurs="1" />
+                    <!--
+                        The quota is how much recordings the users can store. Unit is in hours. This parameter is
+                        mandatory when the service is added to a subscriber
+                    -->
+                    <xs:element name="quota" type="xs:positiveInteger" form="qualified" minOccurs="0" maxOccurs="1" />
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The Vod Service: Video On Demand -->
+    <xs:complexType name="VodType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <!-- The list of Vod Offerings -->
+                    <xs:element name="rentalList" nillable="true" form="qualified" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed vods whose delete-flag is not set to true will be added
+                                    to the subscriber. For SET: All listed vods whose delete-flag is set to true will be
+                                    removed from the subscriber.
+                                -->
+                                <xs:element name="vodTitle" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" use="optional"
+                                            default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+Only applicable in SET. If this is true, all vod items will be removed.
+-->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <!-- The list of  Subscription Vod Authorizations  -->
+                    <xs:element name="authorizationList" form="qualified" nillable="true" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed svod id whose delete-flag is not set to true will be
+                                    added to the subscriber. For SET: All listed svod whose delete-flag is set to true
+                                    will be removed from the subscriber.
+                                -->
+                                <xs:element name="svod" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" use="optional"
+                                            default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+Only applicable in SET. If this is true, all svod items will be
+removed.
+-->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+        The WhatsOnTV service: Is only available for super-users. Makes it possible for a super-user to see what the
+        limited users in the same subscriber are watching.
+    -->
+    <xs:complexType name="WhatsOnTvType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType" />
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- The PayPerView service -->
+    <xs:complexType name="PayPerViewType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <xs:element name="blockList" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed blocks whose delete-flag is not set to true will be added
+                                    to the subscriber. For SET: All listed blocks whose delete-flag is set to true will
+                                    be removed from the subscriber For GET: All channels in the channel list belongs to
+                                    the subscriber
+                                -->
+                                <xs:element name="block" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="offeringId" type="xs:string" use="required" />
+                                        <xs:attribute name="purchaseStartDate" type="xs:dateTime" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+                                Only applicable in SET. If this is true, all channels will be removed and replaced with
+                                all (if any) channels in the channelList of this request.
+                            -->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <!--
+                        The list of event packages defines events the users within the subscriber is allowed to watch.
+                        This parameter is mandatory when the service is added to a subscriber
+                    -->
+                    <xs:element name="eventList" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed events whose delete-flag is not set to true will be added
+                                    to the subscriber. For SET: All listed channel packages whose delete-flag is set to
+                                    true will be removed from the subscriber For GET: All channel packages in the
+                                    channel package list belongs to the subscriber
+                                -->
+                                <xs:element name="event" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="offeringTemplateId" type="xs:string" use="required" />
+                                        <xs:attribute name="programId" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+                                Only applicable in SET. If this is true, all events will be removed and replaced with
+                                all (if any) channelPackages in the channelPackageList of this request.
+                            -->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+        The ChannelManager core-service: allows iptve to manage different applications and mapping between physical and
+        logical addresses
+    -->
+    <xs:complexType name="ChannelManagerType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <xs:element name="channelList" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed channels whose delete-flag is not set to true will be
+                                    added to the subscriber. For SET: All listed channels whose delete-flag is set to
+                                    true will be removed from the subscriber For GET: All channels in the channel list
+                                    belongs to the subscriber
+                                -->
+                                <xs:element name="channel" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="variant" type="xs:string" use="optional" />
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+                                Only applicable in SET. If this is true, all channels will be removed and replaced with
+                                all (if any) channels in the channelList of this request.
+                            -->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                    <!--
+                        The list of broadcast channels packages that defines channels the users within the subscriber is
+                        allowed to watch. This parameter is mandatory when the service is added to a subscriber
+                    -->
+                    <xs:element name="channelPackageList" form="qualified" minOccurs="0" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed channel packages whose delete-flag is not set to true
+                                    will be added to the subscriber. For SET: All listed channel packages whose
+                                    delete-flag is set to true will be removed from the subscriber For GET: All channel
+                                    packages in the channel package list belongs to the subscriber
+                                -->
+                                <xs:element name="channelPackage" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+                                Only applicable in SET. If this is true, all packages will be removed and replaced with
+                                all (if any) channelPackages in the channelPackageList of this request.
+                            -->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+        The identity reservation setting: Reservation of the IMPUs (IM Public Identity) of the subscriber and users
+        belonging to this subscriber
+    -->
+    <xs:complexType name="ReservedUsersType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:sequence>
+                    <xs:element name="reservedUser" form="qualified"  minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                            <xs:attribute name="userId" type="xs:string" use="required" />
+                            <!-- The IMPU (IM Public Identity) of the user  -->
+                            <xs:attribute name="impu" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+The Account Identity setting: Mapping between the subscriber and its
+account identity information
+-->
+    <xs:complexType name="SubscriberAccountIdentityType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <!-- The IMPU (IM Public Identity) of the subscriber  -->
+                    <xs:element name="impu" type="xs:string" form="qualified" minOccurs="0" maxOccurs="1" />
+                    <!-- The HTTP Authentication ID of the subscriber  -->
+                    <xs:element name="httpAuthenticationId" type="xs:string" form="qualified" minOccurs="0" maxOccurs="1" />
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+The optional IPTV Proxy setting: Mapping between the subscriber and
+its IPTV Proxy setting
+-->
+    <xs:complexType name="IptvProxyType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <!-- The optional IPTV Proxy Password for the subscriber  -->
+                    <xs:element name="iptvProxyPassword" type="xs:string" form="qualified" minOccurs="0" maxOccurs="1" />
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SubscriberPortalPreferencesType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:sequence>
+                    <xs:element name="preference" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                            <xs:attribute name="name" type="xs:string" use="required" />
+                            <xs:attribute name="value" type="xs:string" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!--
+Portal Selector. Selects portal for subscriber, on a multiple Portal
+System.
+-->
+    <xs:complexType name="PortalSelectorType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:all>
+                    <!--
+The portal id of the portal that is to be provisioned to the given
+subscriber
+-->
+                    <xs:element name="portalId" type="xs:string" form="qualified" minOccurs="0" maxOccurs="1" />
+                    <!--
+                        A date before which the change to the new portal instance that is provisioned, is allowed to
+                        take effect gracefully.
+                    -->
+                    <xs:element name="effectiveFrom" type="xs:dateTime" form="qualified" minOccurs="0" maxOccurs="1" />
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="bootstrapType">
+        <xs:complexContent>
+            <xs:extension base="ns1:AbstractServiceType">
+                <xs:sequence>
+                    <xs:element name="bootstrapReservePlainEquipment" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="deviceSettings" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="authentication" form="qualified" minOccurs="0" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:attribute name="id" type="xs:string" use="required" />
+                                                    <xs:attribute name="password" type="xs:string" use="required" />
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="noAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="simplePasswordAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="password" type="xs:string" form="qualified" minOccurs="0"
+                                                maxOccurs="1" />
+                                        </xs:sequence>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="registrationCode" type="xs:string" use="required" />
+                            <xs:attribute name="equipmentId" type="xs:string" use="required" />
+                            <xs:attribute name="equipmentName" type="xs:string" use="optional" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="bootstrapReserveIMSEquipment" form="qualified" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="deviceSettings" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="subscriber" form="qualified" minOccurs="0" maxOccurs="1">
+                                                <xs:complexType>
+                                                    <xs:attribute name="impu" type="xs:string" use="required" />
+                                                    <xs:attribute name="impi" type="xs:string" use="optional" />
+                                                    <xs:attribute name="password" type="xs:string" use="optional" />
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="user" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                                    <xs:attribute name="impu" type="xs:string" use="required" />
+                                                    <xs:attribute name="impi" type="xs:string" use="optional" />
+                                                    <xs:attribute name="password" type="xs:string" use="optional" />
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="noAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="simplePasswordAuthentication" form="qualified" minOccurs="0" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="password" type="xs:string" form="qualified" minOccurs="0"
+                                                maxOccurs="1" />
+                                        </xs:sequence>
+                                        <xs:attribute name="delete" type="xs:boolean" default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="registrationCode" type="xs:string" use="required" />
+                            <xs:attribute name="equipmentId" type="xs:string" use="required" />
+                            <xs:attribute name="equipmentName" type="xs:string" use="optional" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+	
+
+</xs:schema>

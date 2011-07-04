@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="file:/C:/tmp/cai/provisioning.wsdl" uri="xml-resources/web-service-references/provisioning/wsdl/provisioning.wsdl"/>
+    <system systemId="file:/C:/tmp/cai/cai3g.xsd" uri="xml-resources/web-service-references/provisioning/wsdl/cai3g.xsd"/>
+    <system systemId="file:/C:/tmp/SessionControl/SessionControlEndpointSlsb.wsdl" uri="xml-resources/web-service-references/SessionControlEndpointSlsb/wsdl/SessionControlEndpointSlsb.wsdl"/>
+    <system systemId="file:/C:/tmp/SessionControl/SessionControlEndpointSlsb.wsdl_1.wsdl" uri="xml-resources/web-service-references/SessionControlEndpointSlsb/wsdl/SessionControlEndpointSlsb.wsdl_1.wsdl"/>
+    <system systemId="file:/C:/tmp/SessionControl/SessionControlEndpointSlsb.xsd_1.xsd" uri="xml-resources/web-service-references/SessionControlEndpointSlsb/wsdl/SessionControlEndpointSlsb.xsd_1.xsd"/>
+    <system systemId="file:/C:/tmp/SessionControl/SessionControlEndpointSlsb.xsd_2.xsd" uri="xml-resources/web-service-references/SessionControlEndpointSlsb/wsdl/SessionControlEndpointSlsb.xsd_2.xsd"/>
+    <system systemId="file:/C:/tmp/SessionControl/SessionControlEndpointSlsb.xsd_3.xsd" uri="xml-resources/web-service-references/SessionControlEndpointSlsb/wsdl/SessionControlEndpointSlsb.xsd_3.xsd"/>
+    <system systemId="file:/C:/tmp/SessionControl/SessionControlEndpointSlsb.xsd_4.xsd" uri="xml-resources/web-service-references/SessionControlEndpointSlsb/wsdl/SessionControlEndpointSlsb.xsd_4.xsd"/>
+    <system systemId="file:/C:/tmp/iapConf.wsdl" uri="xml-resources/web-service-references/iapConf/wsdl/iapConf.wsdl"/>
+</catalog>

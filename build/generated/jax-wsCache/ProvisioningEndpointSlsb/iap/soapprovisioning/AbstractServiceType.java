@@ -29,6 +29,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AbstractServiceType")
 @XmlSeeAlso({
+    PlainBootstrapType.class,
+    ImsBootstrapType.class,
+    EquipmentPortalPreferencesType.class,
     PortalSelectorType.class,
     NetworkTimeshiftType.class,
     SubscriberPortalPreferencesType.class,
@@ -48,10 +51,7 @@ import javax.xml.bind.annotation.XmlType;
     LocalTimeshiftType.class,
     UserAccountIdentityType.class,
     UserPortalPreferencesType.class,
-    ChargingType.class,
-    PlainBootstrapType.class,
-    ImsBootstrapType.class,
-    EquipmentPortalPreferencesType.class
+    ChargingType.class
 })
 public abstract class AbstractServiceType {
 

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.3.2-hudson-754-SNAPSHOT. -->
-<xs:schema xmlns:tns="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/" 
-		   xmlns:ns1="http://schemas.ericsson.com/cai3g1.2/" 
-		   xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+<xs:schema xmlns:tns="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/"
+		   xmlns:ns1="http://schemas.ericsson.com/cai3g1.2/"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		   xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="1.0"
-           xmlns:user="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" version="1.0" 
+           xmlns:user="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" version="1.0"
 		   targetNamespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_subscriber/">
 
 <xs:import namespace="http://schemas.ericsson.com/cai3g1.2/" schemaLocation="ProvisioningEndpointSlsb.xsd_1.xsd"></xs:import>
 <xs:import namespace="http://cai3g.iap.iptv.ericsson.com/iptv_provisioning_user/" schemaLocation="ProvisioningEndpointSlsb.xsd_2.xsd"></xs:import>
 
 
-		
+
 <xs:element name="createSubscriber">
 <xs:complexType>
 <xs:sequence>
@@ -217,7 +217,7 @@ The nPVR (network-based Personal Video Recorder) service: Recording of programs 
             <xs:extension base="ns1:AbstractServiceType">
                 <xs:all>
                     <!-- The list of Vod Offerings -->
-                    <xs:element name="rentalList" nillable="true" form="qualified" minOccurs="0">
+                    <xs:element name="modStreamRentalList" nillable="true" form="qualified" minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
                                 <!--
@@ -232,15 +232,69 @@ The nPVR (network-based Personal Video Recorder) service: Recording of programs 
                                             default="false" />
                                     </xs:complexType>
                                 </xs:element>
+ 
+                                <!--
+                                    For CREATE/SET: All listed vods whose delete-flag is not set to true will be added
+                                    to the subscriber. For SET: All listed vods whose delete-flag is set to true will be
+                                    removed from the subscriber.
+                                -->
+                                <xs:element name="service" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="name" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" use="optional"
+                                            default="false" />
+                                    </xs:complexType>
+                                </xs:element>
                             </xs:sequence>
                             <!--
+
 Only applicable in SET. If this is true, all vod items will be removed.
 -->
                             <xs:attribute name="delete" type="xs:boolean" default="false" />
                         </xs:complexType>
                     </xs:element>
+                    <!-- modDownload-->
+
+                    <xs:element name="modDownloadRentalList" form="qualified" nillable="true" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed svod id whose delete-flag is not set to true will be
+                                    added to the subscriber. For SET: All listed svod whose delete-flag is set to true
+                                    will be removed from the subscriber.
+                                -->
+                                <xs:element name="vodTitle" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" use="optional"
+                                            default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                                <!--
+                                    For CREATE/SET: All listed svod id whose delete-flag is not set to true will be
+                                    added to the subscriber. For SET: All listed svod whose delete-flag is set to true
+                                    will be removed from the subscriber.
+                                -->
+                                <xs:element name="service" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="name" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" use="optional"
+                                            default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+
+
+                            <!--
+Only applicable in SET. If this is true, all svod items will be
+removed.
+-->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+
                     <!-- The list of  Subscription Vod Authorizations  -->
-                    <xs:element name="authorizationList" form="qualified" nillable="true" minOccurs="0">
+                    <xs:element name="svodStreamAuthorizationList" form="qualified" nillable="true" minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
                                 <!--
@@ -263,6 +317,30 @@ removed.
                             <xs:attribute name="delete" type="xs:boolean" default="false" />
                         </xs:complexType>
                     </xs:element>
+                    <xs:element name="svodDownloadAuthorizationList" form="qualified" nillable="true" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <!--
+                                    For CREATE/SET: All listed svod id whose delete-flag is not set to true will be
+                                    added to the subscriber. For SET: All listed svod whose delete-flag is set to true
+                                    will be removed from the subscriber.
+                                -->
+                                <xs:element name="svod" minOccurs="0" form="qualified" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:attribute name="id" type="xs:string" use="required" />
+                                        <xs:attribute name="delete" type="xs:boolean" use="optional"
+                                            default="false" />
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                            <!--
+Only applicable in SET. If this is true, all svod items will be
+removed.
+-->
+                            <xs:attribute name="delete" type="xs:boolean" default="false" />
+                        </xs:complexType>
+                    </xs:element>
+
                 </xs:all>
             </xs:extension>
         </xs:complexContent>
@@ -586,7 +664,4 @@ subscriber
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
-	
-
 </xs:schema>

@@ -45,10 +45,6 @@ public interface Provisioning {
         MOId moId,
         @WebParam(name = "MOAttributes", targetNamespace = "http://schemas.ericsson.com/cai3g1.2/")
         iap.soapprovisioning.Get.MOAttributes moAttributes,
-        @WebParam(header=true, name="SessionId", targetNamespace="http://schemas.ericsson.com/cai3g1.2/")
-        Holder<String> sessionId,
-        @WebParam(header=true, name="SequenceId", targetNamespace="http://schemas.ericsson.com/cai3g1.2/")
-        Holder<BigInteger> sequenceId,
         @WebParam(name = "extension", targetNamespace = "http://schemas.ericsson.com/cai3g1.2/", mode = WebParam.Mode.INOUT)
         Holder<AnySequenceType> extension,
         @WebParam(name = "MOId", targetNamespace = "http://schemas.ericsson.com/cai3g1.2/", mode = WebParam.Mode.OUT)

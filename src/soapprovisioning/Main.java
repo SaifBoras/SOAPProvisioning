@@ -392,9 +392,13 @@ public class Main {
             iapServices.setLocalTimeshift(getLocalTimeshiftService(request.getString("sbsLclTimeshift")));
             iapServices.setLpvr(getLpvrService(request.getString("sbsLPVR")));
             iapServices.setNpvr(getNpvrService(request.getString("sbsNPVR"),request.getString("sbsNPVRQuota"),request.getString("sbsNPVRTTL")));
-            iapServices.setVod(getVodService(request.getString("sbsVOD"),request.getString("sbsVODRentList"),request.getString("sbsVODAuthList"),iapSubscriberId));
+            if(request.getString("sbsVOD").equals("on")){ 
+                iapServices.setVod(getVodService(request.getString("sbsVOD"),request.getString("sbsVODRentList"),request.getString("sbsVODAuthList"),iapSubscriberId));
+            }
             iapServices.setWhatsOnTv(getWhatsOnTv(request.getString("sbsWatsonTV")));
-            iapServices.setChannelManager(getChannelManagerService(request.getString("sbsChannelMngr"),request.getString("sbsChannelMngrLst"),request.getString("sbsChannelPkgLst"),iapSubscriberId));
+            if(request.getString("sbsChannelMngr").equals("on")){
+                iapServices.setChannelManager(getChannelManagerService(request.getString("sbsChannelMngr"),request.getString("sbsChannelMngrLst"),request.getString("sbsChannelPkgLst"),iapSubscriberId));
+            }
             iapServices.setSubscriberAccountIdentity(getSubscriberAccountIdentityService(request.getString("sbsAccountIdent"),request.getString("sbsAccountImpu"),request.getString("sbsAccountHttpId")));
             iapServices.setIptvProxy(getIptvProxyService(request.getString("sbsProxy"),request.getString("sbsProxyPass")));
             iapServices.setSubscriberPortalPreferences(getSubscriberPortalPreferences(request.getString("sbsPortalPref"),iapSubscriberId));
@@ -679,7 +683,7 @@ public class Main {
             Effective = Effective.substring(startInd, endInd);
             //DateTime dt = DateTime.Parse(Effective);
             Date dt = Date.valueOf(Effective);
-            
+           
             iapPortalSelector.setPortalId("portal");
             XMLGregorianCalendar date = new XMLGregorianCalendarImpl();
             
